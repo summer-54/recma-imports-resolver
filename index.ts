@@ -9,16 +9,10 @@ function wrapper(source: string, resolver: (source: string) => string | null | u
 export default function recmaImportsResolver(resolver: (source: string) => string | null | undefined, defaultComponent: string) {
     return () => (tree: Node) => {
         visit(tree, (node) => {
-            if (node.type === 'ImportDeclaration') {
-                if (typeof node.source.value !== "string") return;
-                let res = wrapper(node.source.value, resolver, defaultComponent);
-                node.source.raw = `"${res}"`;
-                node.source.value = res;
-            }
-            if (Array.isArray((node as any).body)) {
-                (node as any).body.forEach(visit);
-            }
+            if (node.type !== 'ImportDeclaration' || typeof node.source.value !== "string") return;
+            let res = wrapper(node.source.value, resolver, defaultComponent);
+            node.source.raw = `"${res}"`;
+            node.source.value = res;
         });
-        visit(tree);
     };
 }
