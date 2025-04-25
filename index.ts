@@ -2,7 +2,7 @@ import {visit} from "estree-util-visit";
 import type {Node} from 'estree';
 
 function wrapper(source: string, resolver: (source: string) => string | null | undefined, defaultComponent: string): string {
-    if (source === "vue/jsx-dev-runtime") return source;
+    if (source === "vue/jsx-dev-runtime" || source === "vue/jsx-runtime") return source;
     return resolver(source) ?? defaultComponent;
 }
 
